@@ -131,11 +131,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="logger.cpp" />
+    <ClCompile Include="loggermessage.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ThreadDeque.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="logger.h" />
+    <ClInclude Include="loggermessage.h" />
     <ClInclude Include="ThreadDeque.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

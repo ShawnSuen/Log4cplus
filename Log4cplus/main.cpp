@@ -7,7 +7,7 @@
 using namespace std;
 
 Logger logger;
-
+/*
 //测试获取本地系统时间是否成功
 TEST(test_getTime, test_getLocalTime)
 {
@@ -29,7 +29,7 @@ TEST(test_Logger, test_FindLoggerFile)
 {
 	EXPECT_NE(0,logger.FindLogFile("..\\log\\*.txt").size());
 }
-
+*/
 int main(int argc,char* argv[])
 {
 	testing::InitGoogleTest(&argc, argv);

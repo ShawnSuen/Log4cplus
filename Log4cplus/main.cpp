@@ -1,7 +1,7 @@
 
 #include <iostream>
 #include "gtest/gtest.h"
-
+#pragma warning(disable:4996)
 #include "logger.h"
 #pragma comment(lib,"gtestd.lib")
 using namespace std;
@@ -17,8 +17,17 @@ TEST(test_getTime, test_getLocalTime)
 //测试生产logger语句
 TEST(test_Logger, test_GernerateLogger)
 {
+	Info("test");
 	string strTime = logger.GetLocalTime();
+	logger.Log(strTime, "Info", "test_GenerateLogger");
 	EXPECT_NE("", logger.Log(strTime, "Info", "test_GenerateLogger"));
+}
+//冲突
+
+//测试查找文件
+TEST(test_Logger, test_FindLoggerFile)
+{
+	EXPECT_NE(0,logger.FindLogFile("..\\log\\*.txt").size());
 }
 
 int main(int argc,char* argv[])

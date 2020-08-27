@@ -8,6 +8,10 @@
 #include<iomanip>
 #include <sstream>
 #include <string>
+#include <vector>
+#include <io.h>
+#include <process.h>
+#include <stdio.h>
 #include "logger.h"
 
 /*************************************************************
@@ -41,9 +45,38 @@ std::string Logger::GetLocalTime() {
 
 std::string Logger::Log(std::string strTime, std::string strLoggerRank, std::string strMessage)
 {
-	std::string strLoggerMessage = strTime + "  [" + strLoggerRank + "]  " + strMessage;
+	int iPid = (int)_getpid();
+	std::string strLoggerMessage = strTime + "|" + strLoggerRank + "|" + std::to_string(iPid)+
+		"|"+__FILE__ + ":" + std::to_string(__LINE__) +  strMessage;
 	std::cout << strLoggerMessage << std::endl;
 	return strLoggerMessage;
+}
+
+/*************************************************************
+* 概述:     FindLogFile
+* 函数名:	FindLogFile
+* 属:		public
+* 返回值:   string
+* 参数列表： 	       参数类型           		描述
+* pAddr 			   char *					传入想要查找的文件类型
+* 版本历史
+*1.0 2020/08/27     孙港富实现功能
+*************************************************************/
+std::vector<std::string> Logger::FindLogFile(const char* pAddr) {
+	_finddata_t fileData;
+	std::vector<std::string> vsLoggerFile;
+	long handle = 0;
+	handle = _findfirst(pAddr, &fileData);
+	if (handle == -1) {
+		return vsLoggerFile;
+	}
+	do {
+		if (strcmp(fileData.name, "...") != 0 && strcmp(fileData.name, ". ") != 0) {
+			vsLoggerFile.push_back(fileData.name);
+		}
+	} while (_findnext(handle, &fileData) == 0);
+	_findclose(handle);
+	return vsLoggerFile;
 }
 
 #endif

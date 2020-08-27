@@ -30,6 +30,9 @@ public:
 	* 版本历史
 	*1.0 2020/08/27     孙港富实现功能
 	*************************************************************/
-	std::string getLocalTime();
+	std::string GetLocalTime();
+
+	std::string Log(std::string strTime, std::string strLoggerRank, std::string strMessage);
+
 };
 #endif

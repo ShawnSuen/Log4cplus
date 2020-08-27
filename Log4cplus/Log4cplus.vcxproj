@@ -132,7 +132,7 @@
   <ItemGroup>
     <ClCompile Include="logger.cpp" />
     <ClCompile Include="loggermessage.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="test\test.cpp" />
     <ClCompile Include="ThreadDeque.cpp" />
   </ItemGroup>
   <ItemGroup>

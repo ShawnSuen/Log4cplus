@@ -18,6 +18,9 @@
 #define LOGGER_MESSAGE_INCLUDE
 
 #include <string>
+
+#define m_StrFile __FILE__
+#define m_StrLineWith __LINE__
 using namespace std;
 class LoggerMessage
 {

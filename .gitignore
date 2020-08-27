@@ -29,7 +29,5 @@ ipch/
 *.csv
 *.txt
 MyTestNoUpload/
-
-lib/
 .rar
 .zip

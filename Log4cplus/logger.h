@@ -19,9 +19,18 @@ class Logger
 {
 
 public:
-	deque<string> g_DSLogger;
-	deque<deque<string>> g_DDSLogger;
-
+	deque<string> g_DSLoggerBuff;//定义一个对列，用来缓存数据
+	/*************************************************************
+	* 概述:     初始化Logger库的方法
+	* 函数名:   InitLogger
+	* 属: public
+	* 返回值:   void
+	* 参数列表： 	       参数类型           		描述
+	*  	       
+	* 版本历史
+	*1.0 2020/08/28     孙港富实现功能
+	*************************************************************/
+	void InitLogger();
 	/*************************************************************
 	* 概述:     生成一条Debug日志，包括日志的时间、等级和信息
 	* 函数名:   Log
@@ -82,27 +91,9 @@ public:
 	*************************************************************/
 	std::string Logger2String(LoggerMessage loggerMessage);
 
-	/*************************************************************
-	* 概述:     TODO
-	* 函数名:   Log	
-	* 属		public
-	* 返回值:   void
-	* 参数列表： 	       参数类型           		描述
-	* pMessage			   char*					输入日志的信息
-	* 版本历史
-	*1.0 2020/08/27     孙港富实现功能
-	*************************************************************/
-	void Init();
-
-	void Write2Deque();
-
-	void close();
-
-
 private:
 
 	LoggerMessage GenerateLoggerMessage(std::string strLoggerRank, std::string strLoggerContent,int nLine, std::string strFileWithLogger);
-
 };
 #define DEBUG(message) Debug(message,__LINE__,__FILE__)
 

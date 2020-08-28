@@ -17,7 +17,6 @@
 #include <fstream> // c++ ÎÄ¼þIOÍ·bai
 #pragma comment(lib,"gtestd.lib")
 
-#include"../ManageLog.h"
 #include "../logger.h"
 #include "../ManageLog.h"
 #include "../ThreadDeque.h"
@@ -70,6 +69,12 @@ TEST(test_LoggerMessage, test_GetLoggerContent)
 	EXPECT_EQ("success", logger.Log("Info", "test"));
 }
 */
+ManageLog manageLog;
+TEST(test_ManageLog, test_GetLogConfig)
+{
+
+	EXPECT_EQ(true, manageLog.GetLoggerConfig());
+}
 Logger logger;
 int main(int argc,char* argv[])
 {
@@ -106,16 +111,13 @@ int main(int argc,char* argv[])
 	//    ManageLog ManageLogTest;
 	//    ManageLogTest.DequeToFile(strDataDeque);
 
-	logger.Init();
 	logger.DEBUG("This is a DEBUG message!");
 	logger.INFO("This is a INFO message!");
 	logger.WARNING("This is a WARNING message!");	
 	logger.ERROR("This is a ERROR messsage!");
-	logger.close();
 	char* pMessage = "test";
-
+	manageLog.GetLoggerConfig();
 	testing::InitGoogleTest(&argc, argv);
-	system("pause");
 	return RUN_ALL_TESTS();
 }
 

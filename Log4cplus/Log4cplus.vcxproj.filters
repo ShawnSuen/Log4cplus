@@ -16,12 +16,18 @@
     <Filter Include="源文件\test">
       <UniqueIdentifier>{5361e5c4-fe69-48f7-bc7e-4556af09a5f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\include">
+      <UniqueIdentifier>{fb142bc4-f46f-468e-b119-1fea2aeee098}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\tinyxml">
+      <UniqueIdentifier>{6b1a5416-828b-4b6b-b02a-3a45a50d5e32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\NewFilter1">
+      <UniqueIdentifier>{dc304d36-e1ff-4bbe-8c9e-3225ce353bd2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="logger.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ThreadDeque.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="loggermessage.cpp">
@@ -31,6 +37,24 @@
       <Filter>源文件\test</Filter>
     </ClCompile>
     <ClCompile Include="ManageLog.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\tinystr.cpp">
+      <Filter>源文件\tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\tinyxml.cpp">
+      <Filter>源文件\tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\tinyxmlerror.cpp">
+      <Filter>源文件\tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\tinyxmlparser.cpp">
+      <Filter>源文件\tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="ThreadDeque.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="utils.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,5 +71,19 @@
     <ClInclude Include="ManageLog.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\Tinyxml\tinystr.h">
+      <Filter>头文件\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Tinyxml\tinyxml.h">
+      <Filter>头文件\include</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\config\logconfig.xml">
+      <Filter>资源文件</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

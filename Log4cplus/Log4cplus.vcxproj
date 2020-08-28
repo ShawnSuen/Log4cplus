@@ -130,17 +130,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\source\tinystr.cpp" />
+    <ClCompile Include="..\source\tinyxml.cpp" />
+    <ClCompile Include="..\source\tinyxmlerror.cpp" />
+    <ClCompile Include="..\source\tinyxmlparser.cpp" />
     <ClCompile Include="logger.cpp" />
     <ClCompile Include="loggermessage.cpp" />
     <ClCompile Include="ManageLog.cpp" />
     <ClCompile Include="test\test.cpp" />
     <ClCompile Include="ThreadDeque.cpp" />
+    <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\Tinyxml\tinystr.h" />
+    <ClInclude Include="..\include\Tinyxml\tinyxml.h" />
     <ClInclude Include="logger.h" />
     <ClInclude Include="loggermessage.h" />
     <ClInclude Include="ManageLog.h" />
     <ClInclude Include="ThreadDeque.h" />
+    <ClInclude Include="utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\config\logconfig.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

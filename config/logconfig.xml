@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--log文件配置文件-->
+<Init>
+  <!--设置log文件保存路径-->
+  <FilePath>../log/</FilePath>
+  <!-- 设置log文件上限-->
+  <FileNum>10</FileNum>
+  <!-- 设置log文件大小上限-->
+  <FileSize>5M</FileSize>
+</Init>

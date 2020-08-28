@@ -1,4 +1,5 @@
-#pragma once
+#ifndef THREADDEQUE_INCLUDE
+#define THREADDEQUE_INCLUDE
 /*********************************************************************
  *
  *  文      件:    ThreadDeque.h   interface for the XXX class.
@@ -17,39 +18,47 @@
 #include <deque>
 #include <thread>
 #include <mutex>
-#include <condition_variable>
 
+
+#include <condition_variable>
+using namespace std;
 class ThreadDeque
 {
 public:
+	
 /*************************************************************
-* 概述:     将十个递减的数push进队列
-* 函数名:   NumSubThread()
+* 概述:      将Log需要打印的内容push进队列
+* 函数名:   LoggerPushThread()
 * 属性:     public
 * 返回值:   void
 * 参数列表： 	       参数类型           取值范围描述
-*
+* strPush              string           log日志push进队列的内容
 * 版本历史
 *1.0  2020/08/27     将Log需要打印的内容push进队列
 *************************************************************/
-	void NumPushThread();
+	void LoggerPushThread(deque<string> dsLogger);
+
+
+
 
 /*************************************************************
-	* 概述:     将十个递减的数push进队列
-	* 函数名:   NumPopThread()
+	* 概述:     将Log需要打印的内容pop出队列
+	* 函数名:   LoggerPopThread()
 	* 属性:     public
-	* 返回值:   void
+	* 返回值:   string
 	* 参数列表： 	       参数类型           取值范围描述
-	*
+	* strNumDeque         deque<string>      缓冲log日志内容的队列
 	* 版本历史
 	*1.0  2020/08/27     将Log需要打印的内容pop出队列
 *************************************************************/
-	void NumPopThread();
+	/*string  NumPopThread();*/
+	void  LoggerPopThread();
 
-
-	std::deque<int> n_numdeque;   //定义一个队列
-	std::mutex mu;               //定义一个锁
-	std::condition_variable cond;//定义一个条件变量
+	deque<deque<string>> GetDeque();
 
 };
+
+#endif
+
+
 

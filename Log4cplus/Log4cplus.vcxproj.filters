@@ -14,7 +14,7 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="源文件\test">
-      <UniqueIdentifier>{6de49171-45bd-4616-aa1d-7803f8eca008}</UniqueIdentifier>
+      <UniqueIdentifier>{5361e5c4-fe69-48f7-bc7e-4556af09a5f5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -30,6 +30,9 @@
     <ClCompile Include="test\test.cpp">
       <Filter>源文件\test</Filter>
     </ClCompile>
+    <ClCompile Include="ManageLog.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="logger.h">
@@ -39,6 +42,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="loggermessage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ManageLog.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

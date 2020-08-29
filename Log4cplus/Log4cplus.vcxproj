@@ -138,7 +138,7 @@
     <ClCompile Include="loggermessage.cpp" />
     <ClCompile Include="ManageLog.cpp" />
     <ClCompile Include="test\test.cpp" />
-    <ClCompile Include="ThreadDeque.cpp" />
+    <ClCompile Include="ThreadManager.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -147,7 +147,7 @@
     <ClInclude Include="logger.h" />
     <ClInclude Include="loggermessage.h" />
     <ClInclude Include="ManageLog.h" />
-    <ClInclude Include="ThreadDeque.h" />
+    <ClInclude Include="threadmanager.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>

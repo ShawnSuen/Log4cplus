@@ -16,9 +16,10 @@
 
 #include "logger.h"
 #include "loggermessage.h"
-#include "ThreadDeque.h"
+#include "threadmanager.h"
 #include "ManageLog.h"
-ThreadDeque g_ThreadDeque;
+ThreadManager threadManager;
+ManageLog manageLog;
 using namespace std;
 
 /*************************************************************
@@ -33,18 +34,18 @@ using namespace std;
 *************************************************************/
 void Logger::InitLogger()
 {
+	//获取LoggerConfig文件
+	thread tGetLoggerConfigThread(&ThreadManager::ReadLoggerManager, threadManager);
+	tGetLoggerConfigThread.join();
 
-	//TODO：设置log是否写入到logger文件中
+	thread tWrite2LoggerFileThread(&ThreadManager::WriteLogger2File, threadManager, g_DSLoggerMessage);
+	tWrite2LoggerFileThread.join();
 
-	//TODO:设置log文件的存储路径
+	thread tWrite2Console(&ThreadManager::WriteLogger2Console, threadManager, g_DSLoggerMessage);
+	tWrite2Console.join();
 
-	//TODO:设置log文件的数量上限
-
-	//TODO:设置log文件的大小
-
-	//TODO:设置是否通过控制台输出
-
-
+	thread tClearFileThread(&ThreadManager::ClearLogFile, threadManager);
+	tClearFileThread.join();
 }
 
 
@@ -130,9 +131,8 @@ void Logger::Debug(char* pLoggerContent, int nLine, char* pFileWithLogger)
 	string strFileName = vsFilePath[vsFilePath.size() - 1];
 	LoggerMessage loggerMessage = GenerateLoggerMessage("Debug", strLoggerContent, nLine, strFileName);
 	string strLogger = Logger2String(loggerMessage);
-	cout << strLogger << endl;
 	//将日志写入到队列里
-	g_DSLoggerMessage.push_back(loggerMessage);
+	g_DSLoggerMessage.push_back(strLogger);
 }
 /*************************************************************
 * 概述:     生成一条Info日志，包括日志的时间、等级和信息
@@ -154,9 +154,8 @@ void Logger::Info(char* pLoggerContent, int nLine, char* pFileWithLogger)
 	string strFileName = vsFilePath[vsFilePath.size() - 1];
 	LoggerMessage loggerMessage = GenerateLoggerMessage("Info", strLoggerContent, nLine, strFileName);
 	string strLogger = Logger2String(loggerMessage);
-	cout << strLogger << endl;
 	//将日志写入到队列里
-	g_DSLoggerMessage.push_back(loggerMessage);
+	g_DSLoggerMessage.push_back(strLogger);
 }
 
 /*************************************************************
@@ -179,9 +178,8 @@ void Logger::Warning(char* pLoggerContent, int nLine, char* pFileWithLogger)
 	string strFileName = vsFilePath[vsFilePath.size() - 1];
 	LoggerMessage loggerMessage = GenerateLoggerMessage("Warning", strLoggerContent, nLine, strFileName);
 	string strLogger = Logger2String(loggerMessage);
-	cout << strLogger << endl;
 	//将日志写入到队列里
-	g_DSLoggerMessage.push_back(loggerMessage);
+	g_DSLoggerMessage.push_back(strLogger);
 }
 
 /*************************************************************
@@ -204,9 +202,8 @@ void Logger::Error(char* pLoggerContent, int nLine, char* pFileWithLogger)
 	string strFileName = vsFilePath[vsFilePath.size() - 1];
 	LoggerMessage loggerMessage = GenerateLoggerMessage("Error", strLoggerContent, nLine, strFileName);
 	string strLogger = Logger2String(loggerMessage);
-	cout << strLogger << endl;
 	//将日志写入到队列里
-	g_DSLoggerMessage.push_back(loggerMessage);
+	g_DSLoggerMessage.push_back(strLogger);
 }
 
 

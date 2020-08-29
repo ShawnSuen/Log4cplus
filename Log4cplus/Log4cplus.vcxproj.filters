@@ -51,18 +51,15 @@
     <ClCompile Include="..\source\tinyxmlparser.cpp">
       <Filter>源文件\tinyxml</Filter>
     </ClCompile>
-    <ClCompile Include="ThreadDeque.cpp">
+    <ClCompile Include="utils.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="utils.cpp">
+    <ClCompile Include="ThreadManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="logger.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ThreadDeque.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="loggermessage.h">
@@ -78,6 +75,9 @@
       <Filter>头文件\include</Filter>
     </ClInclude>
     <ClInclude Include="utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="threadmanager.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

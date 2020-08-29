@@ -19,9 +19,13 @@
 #include "../include/Tinyxml/tinyxml.h"
 #include "ManageLog.h"
 #include "utils.h"
+#include "loggermessage.h"
 using namespace std;
 
 Utils utils;
+
+LoggerConfig loggerConfig;
+
 /*************************************************************
 	* 概述:     在文件夹里创建文件
 	* 函数名:   CreateLog
@@ -36,9 +40,11 @@ Utils utils;
 std::string ManageLog::CreateLogFile(string strFilePath) {
 	string strFileName = utils.GetLocalSystemTime() + ".txt";
 	vector<string> vsFilePath = utils.Split(strFileName, " ");
-	vector<string> vsFileName = utils.Split(vsFilePath[1], ":");
-	string strFullFilePath = strFilePath + "/" + vsFileName[0]
-		+ vsFileName[1] + vsFileName[2] + vsFileName[3];
+	vector<string> vsFileNameDate = utils.Split(vsFilePath[0], "-");
+	vector<string> vsFileNameTime = utils.Split(vsFilePath[1], ":");
+	string strFullFilePath = strFilePath + "/" +
+		vsFileNameDate[0] + vsFileNameDate[1] + vsFileNameDate[2] +
+		vsFileNameTime[0] + vsFileNameTime[1] + vsFileNameTime[2] + vsFileNameTime[3];
 	string strOperationMessage;
 	ofstream fout(strFullFilePath);
 	if (fout) {                       // 如果创建成功
@@ -52,87 +58,47 @@ std::string ManageLog::CreateLogFile(string strFilePath) {
 	}
 	return strOperationMessage;
 };
+
 /*************************************************************
-	* 概述:     清除日志文件
-	* 函数名:   ClearLog
-	* 属:
-	* 返回值:   string
-	* 参数列表： 	       参数类型      string      		描述:清除所创建的文件
-	*
-	* 版本历史
-	*1.0 2020/08/     黄宇翔实现功能
-	*************************************************************/
-	/*
-	std::string ManageLog::ClearLog() {
-		ofstream RemoveDirectory(path);
-
-		return 0;
-	};
-	*/
-
-
-	/*************************************************************
-	* 概述:     将队列CompleteDeque中的日志内容存进日志文件中
-	* 函数名:   DequeToFile
-	* 属性:     public
-	* 返回值:   int
-	* 参数列表： 	       参数类型           取值范围描述
-	* CompleteDeque        deque<string>    时间、等级、日志内容整合在一起的队列
-	* 版本历史
-	*1.0  2020/08/28     将队列CompleteDeque中的日志内容存进日志文件.txt中
-	*************************************************************/
-int ManageLog::DequeToFile(deque<string> CompleteDeque)
+* 概述:     删除Logger文件，保证Logger文件数量的上限为指定数量
+* 函数名:   ClearLogFile
+* 属:		public
+* 返回值:   void
+* 参数列表:
+* vector<string> vsFileName : 目标文件下的所有文件	       
+* 版本历史
+* 1.0 		2020/08/29     孙港富实现功能
+*************************************************************/
+void ManageLog::ClearLogFile(vector<string> vsFileName,int nFileNum)
 {
-	string strAllData;
-	char* path = "..\\logtest.txt"; // 你要创建文件的路径
-	ofstream fout(path);
-	if (fout)
-	{   // 如果创bai建成功	 
-		while (!CompleteDeque.empty())
-		{
-			strAllData = CompleteDeque.back();
-			fout << strAllData << endl; // 使用与cout同样的方du式进行写入
-			CompleteDeque.pop_back();
-			//fout.close(); // 执行完操zhi作后关闭文件句柄
-			cout << "写入文件的内容" << strAllData << endl;
-		}
-	}
-	return 1;
-};
-
-std::string ManageLog::ClearLogFile(vector<string> vsFileName) {
-	int num = vsFileName.size() - 10;
 	vector<string> vsSortedFilePath = utils.SortVectorString(vsFileName);
-	for (int nIndex = 0;nIndex < num;nIndex++)
+	for (int nIndex = vsSortedFilePath.size();nIndex > nFileNum;nIndex--)
 	{
-		//cout << "*************删除文件" << endl;
-		string strFirstPath = vsSortedFilePath[nIndex];
+		string strFirstPath = vsSortedFilePath[vsSortedFilePath.size()-nIndex];
 		char *p = (char*)strFirstPath.c_str();
 		remove(p);
 	}
-	return "success";
 }
 
 
 
-
-void ManageLog::DefaultPrint(deque<deque<string>> dDSLogger) {
-	for (int i = 0; i < dDSLogger.size(); i++)
+/*************************************************************
+* 概述:     默认输出方式(输出到控制台)
+* 函数名:   DefaultPrint
+* 属:		public
+* 返回值:   void
+* 参数列表:
+* deque<string>  dDSLogger 	 目标输出的Logger队列      
+* 版本历史
+* 1.0 		2020/08/29     孙港富实现功能
+*************************************************************/
+void ManageLog::DefaultPrint2Console(deque<string> dDSLogger) {
+	for (int nIndex = 0; nIndex < dDSLogger.size(); nIndex++)
 	{
-		deque<string> dSLogger = dDSLogger.front();
-		dDSLogger.pop_back();
-		for (int p = 0; p < dSLogger.size(); p++)
-		{
-			cout << dSLogger.front();
-			dSLogger.pop_back();
-		}
+		cout << dDSLogger[nIndex] << endl;
 	}
 
 };
-
-
-
-
 
 
 /*************************************************************
@@ -145,16 +111,15 @@ void ManageLog::DefaultPrint(deque<deque<string>> dDSLogger) {
 * 版本历史
 *1.0 2020/08/28     孙港富实现功能
 *************************************************************/
-bool ManageLog::GetLoggerConfig()
+LoggerConfig ManageLog::GetLoggerConfig()
 {
 	map<string, string> m_MLoggerConfig;
-
 	int nLogFileNum;
 	string strLogFileSize;
 	TiXmlDocument tXmlDoc("../config/logconfig.xml");
 	if (!tXmlDoc.LoadFile())
 	{
-		return false;
+		return loggerConfig;
 	}
 	else
 	{
@@ -174,12 +139,21 @@ bool ManageLog::GetLoggerConfig()
 			}
 		}
 		Utils utils;
-		string strLogFilePath = utils.SearchValueInMap(m_MLoggerConfig, "FilePath");
-		string strLogFileSize = utils.SearchValueInMap(m_MLoggerConfig, "FileSize");
-		string strLogFileNum = utils.SearchValueInMap(m_MLoggerConfig, "FileNum");
+		loggerConfig.SetLoggerFilePath(utils.SearchValueInMap(m_MLoggerConfig, "FilePath"));
+		loggerConfig.SetLoggerFileSize(utils.SearchValueInMap(m_MLoggerConfig, "FileSize"));
+		loggerConfig.SetLoggerNum(atoi(utils.SearchValueInMap(m_MLoggerConfig, "FileNum").c_str()));
 
-		cout << strLogFilePath << strLogFileSize << strLogFileNum << endl;
-		return true;
+		string strOutput2File = utils.SearchValueInMap(m_MLoggerConfig, "Write2File");
+		bool bOutput2File;
+		istringstream(strOutput2File) >> boolalpha >> bOutput2File;
+
+		loggerConfig.SetOutput2LoggerFile(bOutput2File);
+		string strOutput2Console = utils.SearchValueInMap(m_MLoggerConfig, "Write2Console");
+		bool bWrite2Console;
+		istringstream(strOutput2File) >> boolalpha >> bWrite2Console;
+		loggerConfig.SetOutput2LoggerFile(bWrite2Console);
+
+		return loggerConfig;
 	}
 }
 
@@ -208,25 +182,22 @@ vector<string> ManageLog::FindLogFile(string strFilePath)
 		}
 	}
 	_findclose(handle);
-	cout << vsFileGroup[1] << endl;
 	return vsFileGroup;
 }
 
 
 /*************************************************************
 * 概述:     将数据缓存区的logger日志写到log文件中
-* 函数名:   
-* 属: 
+* 函数名:   Write2LogFile
+* 属:		public
 * 返回值:   void
 * 参数列表:
-*   	       
+* string strLoggerMessage     将要写入到logger文件中的内容
 * 版本历史
 * 1.0 		2020/08/29     孙港富实现功能
 *************************************************************/
-void ManageLog::Write2LogFile()
+void ManageLog::Write2LogFile(string strFilePath,deque<string> dsLoggerMessage)
 {
-	string strFilePath = CreateLogFile("../log");
-	char* cFilePath = (char*)strFilePath.c_str();
 	ofstream ofsWriteToLFile;
 	ofsWriteToLFile.open(strFilePath, ios::app);
 	if (!ofsWriteToLFile) //检查文件是否正常打开//不是用于检查文件是否存在
@@ -236,7 +207,10 @@ void ManageLog::Write2LogFile()
 	}
 	else
 	{
-		ofsWriteToLFile << "11111111111111111" << endl; 
+		for (int nIndex = 0; nIndex < dsLoggerMessage.size(); nIndex++)
+		{
+			ofsWriteToLFile << dsLoggerMessage[nIndex] << endl;
+		}
 		cout << "写入成功" << endl;
 		ofsWriteToLFile.close();
 	}

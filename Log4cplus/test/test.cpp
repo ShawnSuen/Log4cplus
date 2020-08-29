@@ -71,12 +71,19 @@ TEST(test_LoggerMessage, test_GetLoggerContent)
 	EXPECT_EQ("success", logger.Log("Info", "test"));
 }
 */
-Logger logger;
-void testsss()
-{
-	logger.DEBUG("This is a DEBUG message!");
-}
-ManageLog manageLog;
+//Logger logger;
+//
+//void testsss()
+//{
+//	logger.DEBUG("This is a DEBUG message!");
+//}
+//
+//void testssss()
+//{
+//	logger.INFO("This is a INFO message!");
+//}
+
+//ManageLog manageLog;
 /*
 TEST(test_ManageLog, test_GetLogConfig)
 {
@@ -89,6 +96,28 @@ TEST(test_ManageLog, test_CreateFile)
 	EXPECT_EQ("success", manageLog.CreateLogFile("../log"));
 }
 */
+Logger logger;
+void test1(int i)
+{
+	string messge = "This is DEBUG test!" + to_string(i);
+	char* messc = (char*)messge.c_str();
+	logger.DEBUG(messc);
+} 
+void test2()
+{
+	for (int i = 0; i < 1000; i++)
+	{
+		logger.INFO("This is INFO test!");
+	}
+}
+
+void test3()
+{
+	for (int i = 0; i < 1000; i++)
+	{
+		logger.ERROR("This is ERROR test!");
+	}
+}
 int main(int argc,char* argv[])
 {
 
@@ -132,25 +161,40 @@ int main(int argc,char* argv[])
 
 	char* pMessage = "test";
 	*/
-	/*
-	thread t(testsss);
-	t.join();
-	thread t1(testsss);
-	t1.join();
-	*/
 
-	manageLog.Write2LogFile();
-	 
-	vector<string> vs = manageLog.FindLogFile("../log");
-	cout << "vsµÄ´óÐ¡" << vs.size() << endl;
-	string ss = "";
-	do
+	thread t1(test2);
+	t1.join();
+
+	for (int i = 0; i < 2000; i++)
 	{
-		ss = manageLog.ClearLogFile(vs);
-	} while (ss != "success");
+		logger.ERROR("This is ERROR test!");
+	}
+	
+	thread t3(test3);
+	t3.join();
+
+	for (int i = 0; i < 2000; i++)
+	{
+		thread t(test1,i);
+		t.join();
+	}
+
+
+	//cout << logger.g_DSLoggerMessage.size() << endl;
+	//manageLog.Write2LogFile(logger.g_DSLoggerMessage);
+	//
+	//manageLog.DefaultPrint2Console(logger.g_DSLoggerMessage);
+
+	//vector<string> vs = manageLog.FindLogFile("../log");
+	////manageLog.ClearLogFile();
+
+
 
 	testing::InitGoogleTest(&argc, argv);
-	return RUN_ALL_TESTS();
+	RUN_ALL_TESTS();
+	logger.InitLogger();
+
+	return 0;
 }
 
 #endif

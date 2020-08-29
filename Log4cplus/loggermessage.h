@@ -194,13 +194,45 @@ public:
 	string GetLoggerContent();
 
 private:
-	string m_StrTime;
-	int m_NProcessId;
-	string m_StrLoggerRank;
-	int m_NThreadId;
-	string m_StrFileWithLogger;
-	int m_NLineWithLogger;
-	string m_StrLoggerContent;
+	string m_StrTime;	// Logger 日志生成的时间
+	int m_NProcessId;	// logger 日志生成时所在的进程
+	string m_StrLoggerRank;	// logger 日志的等级
+	int m_NThreadId;	//logger 日志生成所在的线程
+	string m_StrFileWithLogger;	//logger 日志生成时所在的文件
+	int m_NLineWithLogger;	//logger日志生成时所在的行数
+	string m_StrLoggerContent;	//logger 日志的内容
 
+};
+
+class LoggerConfig
+{
+
+public:
+	void SetLoggerFilePath(string strFilePath);
+
+	void SetLoggerNum(int nLoggerFileNum);
+
+	void SetLoggerFileSize(string strLoggerFileSize);
+
+	void SetOutput2LoggerFile(bool bOutput2LoggerFile);
+
+	void SetOutput2Console(bool bOutput2Console);
+
+	string GetLoggerFilePath();
+
+	int GetLoggerNum();
+
+	string GetLoggerFileSize();
+	
+	bool GetOutput2LoggerFile();
+
+	bool GetOutput2Console();
+
+private:
+	string g_StrLoggerFilePath;	//日志文件保存的路径
+	int g_NLoggerFileNum;	//日志文件的上限数量
+	string g_StrLoggerFileSize;	//日志文件的上限大小
+	bool g_BOutput2LoggerFile;	//是否将日志输出到文件中
+	bool g_BOutput2Console;	//是否将日志信息输出到控制台
 };
 #endif

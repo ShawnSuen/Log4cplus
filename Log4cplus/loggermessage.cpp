@@ -234,4 +234,55 @@ string LoggerMessage::GetLoggerContent()
 	return m_StrLoggerContent;
 }
 
+
+void LoggerConfig::SetLoggerFilePath(string strFilePath)
+{
+	g_StrLoggerFilePath = strFilePath;
+};
+
+void LoggerConfig::SetLoggerNum(int nLoggerFileNum)
+{
+	g_NLoggerFileNum = nLoggerFileNum;
+}
+
+void LoggerConfig::SetLoggerFileSize(string strLoggerFileSize)
+{
+	g_StrLoggerFileSize = strLoggerFileSize;
+}
+
+void LoggerConfig::SetOutput2LoggerFile(bool bOutput2LoggerFile)
+{
+	g_BOutput2LoggerFile = bOutput2LoggerFile;
+}
+
+void LoggerConfig::SetOutput2Console(bool bOutput2Console)
+{
+	g_BOutput2Console = bOutput2Console;
+}
+
+string LoggerConfig::GetLoggerFilePath()
+{
+	return g_StrLoggerFilePath;
+}
+
+int LoggerConfig::GetLoggerNum()
+{
+	return g_NLoggerFileNum;
+}
+
+string LoggerConfig::GetLoggerFileSize()
+{
+	return g_StrLoggerFileSize;
+}
+
+bool LoggerConfig::GetOutput2LoggerFile()
+{
+	return g_BOutput2LoggerFile;
+}
+
+bool LoggerConfig::GetOutput2Console()
+{
+	return g_BOutput2Console;
+}
+
 #endif

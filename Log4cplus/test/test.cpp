@@ -22,7 +22,6 @@
 #include "../ManageLog.h"
 
 #include "../loggermessage.h"
-#include "../utils.h"
 
 
 /*
@@ -78,12 +77,18 @@ void testsss()
 	logger.DEBUG("This is a DEBUG message!");
 }
 ManageLog manageLog;
+/*
 TEST(test_ManageLog, test_GetLogConfig)
 {
 
 	EXPECT_EQ(true, manageLog.GetLoggerConfig());
 }
 
+TEST(test_ManageLog, test_CreateFile)
+{
+	EXPECT_EQ("success", manageLog.CreateLogFile("../log"));
+}
+*/
 int main(int argc,char* argv[])
 {
 
@@ -119,7 +124,7 @@ int main(int argc,char* argv[])
 	//    ManageLog ManageLogTest;
 	//    ManageLogTest.DequeToFile(strDataDeque);
 	/*
-	Utils utils;
+
 	logger.DEBUG("This is a DEBUG message!");
 	logger.INFO("This is a INFO message!");
 	logger.WARNING("This is a WARNING message!");	
@@ -127,13 +132,23 @@ int main(int argc,char* argv[])
 
 	char* pMessage = "test";
 	*/
+	/*
 	thread t(testsss);
 	t.join();
 	thread t1(testsss);
 	t1.join();
+	*/
 
-	cout << logger.g_DSLoggerMessage.size() << endl;
-	manageLog.GetLoggerConfig();
+	manageLog.Write2LogFile();
+	 
+	vector<string> vs = manageLog.FindLogFile("../log");
+	cout << "vsµÄ´óÐ¡" << vs.size() << endl;
+	string ss = "";
+	do
+	{
+		ss = manageLog.ClearLogFile(vs);
+	} while (ss != "success");
+
 	testing::InitGoogleTest(&argc, argv);
 	return RUN_ALL_TESTS();
 }

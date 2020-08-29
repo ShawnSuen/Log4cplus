@@ -7,18 +7,23 @@
 #include <string>
 #include <vector>
 #include <cstdio>
-#include "windows.h"
+#include <windows.h>
 #include <list>
 #include <time.h>
 #include <algorithm> 
 #include <map>
+#include <stdlib.h>
+#include <stdio.h>
+#include <sstream>
 
 #include "../include/Tinyxml/tinyxml.h"
 #include "ManageLog.h"
 #include "utils.h"
 using namespace std;
+
+Utils utils;
 /*************************************************************
-	* 概述:     在文件夹里创建txt文件
+	* 概述:     在文件夹里创建文件
 	* 函数名:   CreateLog
 	* 属:		public
 	* 返回值:   str1
@@ -26,16 +31,26 @@ using namespace std;
 	*
 	* 版本历史
 	*1.0 2020/08/     黄宇翔实现功能
+	*1.1 2020/08/29	  孙港富对该功能进行了完善
 	*************************************************************/
-std::string ManageLog::CreateLog() {
-	string  str1;
-	// 你要创建文件的路径
-	ofstream fout(path);
+std::string ManageLog::CreateLogFile(string strFilePath) {
+	string strFileName = utils.GetLocalSystemTime() + ".txt";
+	vector<string> vsFilePath = utils.Split(strFileName, " ");
+	vector<string> vsFileName = utils.Split(vsFilePath[1], ":");
+	string strFullFilePath = strFilePath + "/" + vsFileName[0]
+		+ vsFileName[1] + vsFileName[2] + vsFileName[3];
+	string strOperationMessage;
+	ofstream fout(strFullFilePath);
 	if (fout) {                       // 如果创建成功
-		fout << "str1" << endl;         // 使用与cout同样的方式进行写入
-		fout.close();                   // 执行完操作后关闭文件句柄}
+		fout.close();                   // 执行完操作后关闭文件句柄
+		strOperationMessage = strFullFilePath;
 	}
-	return str1;
+	else
+	{
+		fout.close();
+		strOperationMessage = "fail";
+	}
+	return strOperationMessage;
 };
 /*************************************************************
 	* 概述:     清除日志文件
@@ -47,23 +62,25 @@ std::string ManageLog::CreateLog() {
 	* 版本历史
 	*1.0 2020/08/     黄宇翔实现功能
 	*************************************************************/
-std::string ManageLog::ClearLog() {
-	ofstream RemoveDirectory(path);
+	/*
+	std::string ManageLog::ClearLog() {
+		ofstream RemoveDirectory(path);
 
-	return 0;
-};
+		return 0;
+	};
+	*/
 
 
-/*************************************************************
-* 概述:     将队列CompleteDeque中的日志内容存进日志文件中
-* 函数名:   DequeToFile
-* 属性:     public
-* 返回值:   int
-* 参数列表： 	       参数类型           取值范围描述
-* CompleteDeque        deque<string>    时间、等级、日志内容整合在一起的队列
-* 版本历史
-*1.0  2020/08/28     将队列CompleteDeque中的日志内容存进日志文件.txt中
-*************************************************************/
+	/*************************************************************
+	* 概述:     将队列CompleteDeque中的日志内容存进日志文件中
+	* 函数名:   DequeToFile
+	* 属性:     public
+	* 返回值:   int
+	* 参数列表： 	       参数类型           取值范围描述
+	* CompleteDeque        deque<string>    时间、等级、日志内容整合在一起的队列
+	* 版本历史
+	*1.0  2020/08/28     将队列CompleteDeque中的日志内容存进日志文件.txt中
+	*************************************************************/
 int ManageLog::DequeToFile(deque<string> CompleteDeque)
 {
 	string strAllData;
@@ -83,172 +100,20 @@ int ManageLog::DequeToFile(deque<string> CompleteDeque)
 	return 1;
 };
 
-
-
-/*************************************************************
-	* 概述:     获取文件夹下所有的文件名并将文件名压进队列
-	* 函数名:   FileCount
-	* 属:
-	* 返回值:
-	* 参数列表： 	       参数类型           		描述
-	*
-	* 版本历史
-	*1.0 2020/08/     黄宇翔实现功能
-	*************************************************************/
-
-std::string ManageLog::ClearLogFile() {
-	deque<string> dsFileName;
-	cout << "********************" << dsFileName.empty() << endl;
-	_finddata_t file;
-	string strFirstPath;
-	long lf; string str2;
-	//修改这里bai选择路径和要查找的文件类型
-	if ((lf = _findfirst("..\\log\\*.txt", &file)) == -1l)
-		cout << "文件没有找到!\n";
-	else
+std::string ManageLog::ClearLogFile(vector<string> vsFileName) {
+	int num = vsFileName.size() - 10;
+	vector<string> vsSortedFilePath = utils.SortVectorString(vsFileName);
+	for (int nIndex = 0;nIndex < num;nIndex++)
 	{
-		do {
-			str2 = file.name; dsFileName.push_back(str2);
-
-		} while (_findnext(lf, &file) == 0);
-		_findclose(lf);
-		//调用排序算法
-		FileList();
-		while (dsFileName.size() > 2)
-		{
-			strFirstPath = "..\\log\\" + dsFileName.front();
-			char pFirstPath[1024];
-			strcpy(pFirstPath, strFirstPath.c_str());
-			dsFileName.pop_back();
-			remove(pFirstPath);
-		}
-	}return "ss0";
-}
-
-//获取指定文件的创建日期，对文件队列进行排序，返回队列，传入的参数：队列
-
-
-struct FileInfo
-{
-	string     fileName;
-	long long  time_write;
-
-	static bool LessThan(FileInfo a, FileInfo b)
-	{
-		return a.time_write > b.time_write;
+		//cout << "*************删除文件" << endl;
+		string strFirstPath = vsSortedFilePath[nIndex];
+		char *p = (char*)strFirstPath.c_str();
+		remove(p);
 	}
-};
-
-
-//filePath为文件路径，suffix为后缀名
-char* substr(const char*str, unsigned start, unsigned end)
-{
-	unsigned n = end - start;
-	static char stbuf[512];
-	//复制最后三个字符，即后缀
-	strncpy(stbuf, str + start, n);
-	//字串最后加上0
-	stbuf[n] = 0;
-	return stbuf;
+	return "success";
 }
 
 
-//判断某文件后缀是否为指定格式
-bool decideSuffix(char* filePath, char* suffix)
-{
-	char* fileExt;
-	char *ptr, c = '.';
-	//最后一个出现c的位置
-	ptr = strrchr(filePath, c);
-	//用指针相减 求得索引
-	int pos = ptr - filePath;
-	//获取后缀
-	fileExt = substr(filePath, pos + 1, strlen(filePath));
-	//判断后缀是否相同
-	if (0 == strcmp(fileExt, suffix))
-		return true;
-	else
-		return false;
-}
-
-
-void getFiles(string path, string suffix, unsigned int minFileByteSize, vector<FileInfo>& files)
-{
-	//文件句柄
-	long   hFile = 0;
-	//文件信息
-	struct _finddata_t fileinfo;
-	//
-	FileInfo tmpFileInfo;
-	string p, tmp;
-	p = p.assign(path).append("\\*");
-	if ((hFile = _findfirst(p.c_str(), &fileinfo)) != -1)
-	{
-		do
-		{
-			//如果是目录,迭代之，在这里不想迭代
-			if ((fileinfo.attrib &  _A_SUBDIR))
-			{
-				/*	if (strcmp(fileinfo.name, ".") != 0 && strcmp(fileinfo.name, "..") != 0)
-						getFiles(p.assign(path).append("\\").append(fileinfo.name), files);*/
-			}
-			else//如果是文件
-			{
-				//判断文件后缀是否符合要求
-				if (decideSuffix(fileinfo.name, (char*)suffix.c_str()))
-				{
-					if (fileinfo.size >= minFileByteSize)
-					{
-						tmp = tmp.assign(path).append("\\").append(fileinfo.name);
-						tmpFileInfo.fileName = tmp;
-						tmp = "";
-						tmpFileInfo.time_write = fileinfo.time_write;
-						files.push_back(tmpFileInfo);
-					}
-				}
-			}
-		} while (_findnext(hFile, &fileinfo) == 0);
-		_findclose(hFile);
-	}
-}
-
-string ManageLog::FileList()
-{
-	std::string directoryRootPath = "..\\log\\";
-	time_t sttime;
-	struct tm * tim;
-	int sec = 0, min = 0, hour = 0, mday = 0, mon = 0, year = 0;
-	time(&sttime);
-	tim = localtime(&sttime);
-	sec = tim->tm_sec;		   // second (0-61, allows for leap seconds)
-	min = tim->tm_min;     // minute (0-59)
-	hour = tim->tm_hour;   // hour (0-23)
-	mday = tim->tm_mday;   // day of the month (1-31)
-	mon = tim->tm_mon + 1; // month (0-11)
-	year = tim->tm_year + 1900; // years since 1900
-	char newDirectoryName[256] = { 0 };
-	memset(newDirectoryName, 0, sizeof(newDirectoryName));
-	sprintf(newDirectoryName, "%04d_%02d_%02d", year, mon, mday);
-
-	//最终要查找的目录
-	string finalDirectoryPath = directoryRootPath + std::string(newDirectoryName);
-	string suffix = "osg";
-
-	vector<FileInfo> filesVec;
-	getFiles(finalDirectoryPath, suffix, 60, filesVec);
-	//按time_write排序
-	std::sort(filesVec.begin(), filesVec.end(), FileInfo::LessThan);
-	char str[30];
-	int size = filesVec.size();
-	for (int i = 0; i < size; i++)
-	{
-		cout << filesVec[i].fileName.c_str() << endl;
-	}
-
-	getchar();
-
-	return "ddd";
-}
 
 
 void ManageLog::DefaultPrint(deque<deque<string>> dDSLogger) {
@@ -282,7 +147,7 @@ void ManageLog::DefaultPrint(deque<deque<string>> dDSLogger) {
 *************************************************************/
 bool ManageLog::GetLoggerConfig()
 {
-	map<string,string> m_MLoggerConfig;
+	map<string, string> m_MLoggerConfig;
 
 	int nLogFileNum;
 	string strLogFileSize;
@@ -309,14 +174,126 @@ bool ManageLog::GetLoggerConfig()
 			}
 		}
 		Utils utils;
-		string strLogFilePath = utils.SearchValueInMap(m_MLoggerConfig,"FilePath");
+		string strLogFilePath = utils.SearchValueInMap(m_MLoggerConfig, "FilePath");
 		string strLogFileSize = utils.SearchValueInMap(m_MLoggerConfig, "FileSize");
 		string strLogFileNum = utils.SearchValueInMap(m_MLoggerConfig, "FileNum");
 
-		cout << strLogFilePath << strLogFileSize  << strLogFileNum << endl;
+		cout << strLogFilePath << strLogFileSize << strLogFileNum << endl;
 		return true;
 	}
 }
 
+/*************************************************************
+* 概述:     查找Log文件并将完整路径进行返回
+* 函数名:	FindLogFile
+* 属:		public
+* 返回值:   vector<string> vsFileGroup
+* 参数列表： 	       参数类型           		描述
+* strFilePath 	       string					想要查找的文件夹路径
+* 版本历史
+* 1.0 2020/08/29     孙港富实现功能
+*************************************************************/
+vector<string> ManageLog::FindLogFile(string strFilePath)
+{
+	vector<string> vsFileGroup; //用来存储目标文件
+	string strFullFilePath = strFilePath + "/*.txt";
+	const char* to_search = strFullFilePath.c_str();
+	long handle;    //用于查找的句柄
+	struct _finddata_t fileinfo;    //文件信息的结构体
+	handle = _findfirst(to_search, &fileinfo);    //第一次查找
+	if (handle != -1) {
+		vsFileGroup.push_back(strFilePath + "/" + fileinfo.name);
+		while (!_findnext(handle, &fileinfo)) {    //循环查找其它符合的文件，直到找不到其它的为止
+			vsFileGroup.push_back(strFilePath + "/" + fileinfo.name);
+		}
+	}
+	_findclose(handle);
+	cout << vsFileGroup[1] << endl;
+	return vsFileGroup;
+}
+
+
+/*************************************************************
+* 概述:     将数据缓存区的logger日志写到log文件中
+* 函数名:   
+* 属: 
+* 返回值:   void
+* 参数列表:
+*   	       
+* 版本历史
+* 1.0 		2020/08/29     孙港富实现功能
+*************************************************************/
+void ManageLog::Write2LogFile()
+{
+	string strFilePath = CreateLogFile("../log");
+	char* cFilePath = (char*)strFilePath.c_str();
+	ofstream ofsWriteToLFile;
+	ofsWriteToLFile.open(strFilePath, ios::app);
+	if (!ofsWriteToLFile) //检查文件是否正常打开//不是用于检查文件是否存在
+	{
+		cout << strFilePath << "无法打开！" << endl;
+		abort(); //打开失败，结束程序
+	}
+	else
+	{
+		ofsWriteToLFile << "11111111111111111" << endl; 
+		cout << "写入成功" << endl;
+		ofsWriteToLFile.close();
+	}
+}
+
+/*************************************************************
+* 概述:     对目标文件组中的文件进行排序，因为Log文件的名字以其
+*		创建日期命名，所以可以根据文件名来对文件组进行排序此处期
+*		望通过调用c++ 的time.h库来获得文件的创建时间并已得到实现，
+*		但是只能获取到第一个文件的信息，需要对此此处的代码进行修
+*       改实现对一个容器内所有的文件获取其创建时间
+* 函数名:   SortFileByName
+* 属:		public
+* 返回值:   void
+* 参数列表:
+* vector<string> vsFileGroup 	 期望排序的目标文件组
+* 版本历史
+* 1.0 		2020/08/29     孙港富实现功能
+*************************************************************/
+vector<string> ManageLog::SortFileByName(vector<string> vsFileGroup)
+{
+
+	map<string, string> mssFileMapGroup; // 存文件的路径与创建时间
+	vector<string> vsFileTimeGroup;	// 存放文件的创建时间
+
+		/*
+	for (int nFileGroupIndex = 0; nFileGroupIndex < vsFileGroup.size(); nFileGroupIndex++)
+	{
+
+
+		string stringsss = vsFileGroup[nFileGroupIndex];
+		struct stat strusFileBuf;
+		const char* strFileName = stringsss.c_str(); // 获取文件的路径并转换为char数组
+		int nFileStateResult = stat(strFileName, &strusFileBuf);
+		if (!nFileStateResult)
+		{
+			stringstream ssTimet2StringStream;
+			ssTimet2StringStream << time_t(&strusFileBuf.st_ctime);
+			string strFileCreateTime;
+			strFileCreateTime = ssTimet2StringStream.str();
+			mssFileMapGroup.insert(make_pair(strFileCreateTime, vsFileGroup[nFileGroupIndex]));
+			vsFileTimeGroup.push_back(strFileCreateTime);
+			cout << "**************" << strFileCreateTime << endl;
+		}
+	}
+	*/
+	vector<string> vsSortedFileTimeGroup = utils.SortVectorString(vsFileGroup); //已经经过排序的文件时间组
+	/*
+	vector<string> vsSortedFileGroup;
+	for (int nIndex = 0; nIndex < vsSortedFileTimeGroup.size(); nIndex++)
+	{
+		string strFilePath = utils.SearchValueInMap(mssFileMapGroup, vsSortedFileTimeGroup[nIndex]);
+		vsSortedFileGroup.push_back(strFilePath);
+	}
+	cout << "vss" << vsSortedFileTimeGroup.size() << endl;
+	*/
+	return vsSortedFileTimeGroup;
+}
 
 #endif

@@ -18,9 +18,7 @@
 #include "loggermessage.h"
 #include "ThreadDeque.h"
 #include "ManageLog.h"
-#include "utils.h"
 ThreadDeque g_ThreadDeque;
-Utils utils;
 using namespace std;
 
 /*************************************************************

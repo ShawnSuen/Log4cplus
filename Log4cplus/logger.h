@@ -10,6 +10,7 @@
 #include <sstream>
 #include <deque>
 
+#include "utils.h"
 #include "loggermessage.h"
 
 
@@ -19,6 +20,7 @@ class Logger
 {
 
 public:
+	Utils utils;
 	deque<LoggerMessage> g_DSLoggerMessage;//定义一个对列，用来缓存数据
 	/*************************************************************
 	* 概述:     初始化Logger库的方法

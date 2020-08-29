@@ -108,11 +108,23 @@ std::string Utils::GetLocalSystemTime()
 
 	char cLocalTime[34];
 
-	sprintf(cLocalTime,"%4d/%02d/%02d %02d:%02d:%02d.%03d"
+	sprintf(cLocalTime,"%4d-%02d-%02d %02d:%02d:%02d:%03d"
 		, sys.wYear, sys.wMonth, sys.wDay
 		, sys.wHour, sys.wMinute, sys.wSecond, sys.wMilliseconds);
 
 	string strLcoalTime = cLocalTime;
 	return strLcoalTime;
+}
+
+vector<string> Utils::SortVectorString(vector<string> vesTargetVector)
+{
+	for (int nIndex = 0; nIndex < vesTargetVector.size(); nIndex++) {//排列len趟完成排序
+		for (int nSubIndex = 0; nSubIndex < vesTargetVector.size() - nIndex - 1; ++nSubIndex) {//每趟排序的元素都从第一个元素开始到尾部没有排序好的元素。第一趟为第一个元素到最后一个元素，排出了最大元素。第二趟为第一个元素到倒数第二个元素(排除以排序好的元素)，排出第二大的元素。
+			if (vesTargetVector[nSubIndex] > vesTargetVector[nSubIndex + 1]) {
+				swap(vesTargetVector[nSubIndex], vesTargetVector[nSubIndex + 1]);
+			}
+		}
+	}
+	return vesTargetVector;
 }
 #endif

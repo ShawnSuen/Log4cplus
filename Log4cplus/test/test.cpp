@@ -120,7 +120,7 @@ void test3()
 }
 int main(int argc,char* argv[])
 {
-
+	logger.InitLogger();
 	//œﬂ≥Ã≤‚ ‘
 	//ThreadDeque threaddeque;
 	//std::thread thread1(&ThreadDeque::NumPushThread, threaddeque,"wangyognsheng");
@@ -192,7 +192,7 @@ int main(int argc,char* argv[])
 
 	testing::InitGoogleTest(&argc, argv);
 	RUN_ALL_TESTS();
-	logger.InitLogger();
+	//logger.CloseLogger();
 
 	return 0;
 }

@@ -38,6 +38,11 @@ void Logger::InitLogger()
 	thread tGetLoggerConfigThread(&ThreadManager::ReadLoggerManager, threadManager);
 	tGetLoggerConfigThread.join();
 
+	
+}
+
+void Logger::CloseLogger()
+{
 	thread tWrite2LoggerFileThread(&ThreadManager::WriteLogger2File, threadManager, g_DSLoggerMessage);
 	tWrite2LoggerFileThread.join();
 

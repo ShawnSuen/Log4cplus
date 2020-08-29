@@ -34,6 +34,20 @@ public:
 	*1.0 2020/08/28     孙港富实现功能
 	*************************************************************/
 	void InitLogger();
+
+	/*************************************************************
+	* 概述:     关闭Logger库的方法
+	* 函数名:   CloseLogger
+	* 属: public
+	* 返回值:   void
+	* 参数列表： 	       参数类型           		描述
+	*
+	* 版本历史
+	*1.0 2020/08/28     孙港富实现功能
+	*************************************************************/
+	void CloseLogger();
+
+
 	/*************************************************************
 	* 概述:     生成一条Debug日志，包括日志的时间、等级和信息
 	* 函数名:   Log
@@ -94,8 +108,8 @@ public:
 	*************************************************************/
 	std::string Logger2String(LoggerMessage loggerMessage);
 
-private:
 
+private:
 	LoggerMessage GenerateLoggerMessage(std::string strLoggerRank, std::string strLoggerContent,int nLine, std::string strFileWithLogger);
 };
 #define DEBUG(message) Debug(message,__LINE__,__FILE__)

@@ -10,8 +10,9 @@
 #include <string>
 #include <vector>
 #include <io.h>
-#include <process.h>
 #include <stdio.h>
+#include <process.h>
+#include <thread>
 
 #include "logger.h"
 #include "loggermessage.h"
@@ -47,34 +48,7 @@ void Logger::InitLogger()
 
 
 }
-/*************************************************************
-* 概述:     获取本地系统时间时间
-* 函数名:   getLocalTime
-* 属:		public
-* 返回值:   string strLocalTime
-* 参数列表： 	       参数类型           		描述
-* strLocalTime 	       string					返回本地系统时间
-* 版本历史
-*1.0 2020/08/27     孙港富实现功能
-*************************************************************/
-std::string GetLocalTime() {
-	std::stringstream strsStransTime;
-	auto t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-	strsStransTime << std::put_time(std::localtime(&t), "%Y-%m-%d %X");
-	std::string strLocalTime;
-	if (strsStransTime)
-	{
-		strLocalTime = strsStransTime.str();
-		std::cout << strLocalTime << std::endl;
-		return strLocalTime;
-	}
-	else
-	{
-		strLocalTime = "ERROR";
-	}
 
-	return strLocalTime;
-}
 
 /*************************************************************
 * 概述:     将LoggerMessage对象转化成字符串用来加入队列
@@ -88,8 +62,13 @@ std::string GetLocalTime() {
 *************************************************************/
 std::string Logger::Logger2String(LoggerMessage loggerMessage)
 {
-	string strLoggerMessage = loggerMessage.GetTime() + "  " + loggerMessage.GetLoggerRank() + "|" +
-		loggerMessage.GetFileWithLogger() + ":" + std::to_string(loggerMessage.GetLineWithLogger()) + "  " + loggerMessage.GetLoggerContent();
+	string strLoggerMessage = loggerMessage.GetTime() + "  " +
+		to_string(loggerMessage.GetLoggerPid()) + "|" +
+		loggerMessage.GetLoggerRank() + "|" +
+		to_string(loggerMessage.GetLoggerTid()) + "|" +
+		loggerMessage.GetFileWithLogger() + ":" +
+		std::to_string(loggerMessage.GetLineWithLogger()) + "    " +
+		loggerMessage.GetLoggerContent();
 	return strLoggerMessage;
 }
 
@@ -104,18 +83,34 @@ std::string Logger::Logger2String(LoggerMessage loggerMessage)
 * 版本历史
 *1.0 2020/08/27     孙港富实现功能
 *************************************************************/
-LoggerMessage Logger::GenerateLoggerMessage(std::string strLoggerRank, std::string strLoggerContent, int nLine,std::string strFileWithLogger)
+LoggerMessage Logger::GenerateLoggerMessage(std::string strLoggerRank, std::string strLoggerContent, int nLine, std::string strFileWithLogger)
 {
+
+	stringstream ssThreadId;
+	ssThreadId << std::this_thread::get_id();
+	int nLoggerTid;
+	if (ssThreadId)
+	{
+		string strStream2String;
+		strStream2String = ssThreadId.str();
+		int nString2Long = stoi(strStream2String);
+		nLoggerTid = nString2Long;
+	}
+	else
+	{
+		nLoggerTid = 0;
+	}
+
 	LoggerMessage loggerMessage;
-	loggerMessage.SetTime(GetLocalTime());
+	loggerMessage.SetTime(utils.GetLocalSystemTime());
+	loggerMessage.SetLoggerPid(_getpid());
 	loggerMessage.SetLoggerRank(strLoggerRank);
+	loggerMessage.SetLoggerTid(nLoggerTid);
 	loggerMessage.SetFileWithLogger(strFileWithLogger);
 	loggerMessage.SetLineWithLogger(nLine);
 	loggerMessage.SetLoggerCotent(strLoggerContent);
 	return loggerMessage;
 }
-
-
 
 /*************************************************************
 * 概述:     生成一条Debug日志，包括日志的时间、等级和信息
@@ -129,7 +124,7 @@ LoggerMessage Logger::GenerateLoggerMessage(std::string strLoggerRank, std::stri
 * 版本历史
 *1.0 2020/08/27     孙港富实现功能
 *************************************************************/
-void Logger::Debug(char* pLoggerContent,int nLine,char* pFileWithLogger)
+void Logger::Debug(char* pLoggerContent, int nLine, char* pFileWithLogger)
 {
 	string strLoggerContent = pLoggerContent;
 	string strFileWithLogger = pFileWithLogger;
@@ -137,8 +132,9 @@ void Logger::Debug(char* pLoggerContent,int nLine,char* pFileWithLogger)
 	string strFileName = vsFilePath[vsFilePath.size() - 1];
 	LoggerMessage loggerMessage = GenerateLoggerMessage("Debug", strLoggerContent, nLine, strFileName);
 	string strLogger = Logger2String(loggerMessage);
-
+	cout << strLogger << endl;
 	//将日志写入到队列里
+	g_DSLoggerMessage.push_back(loggerMessage);
 }
 /*************************************************************
 * 概述:     生成一条Info日志，包括日志的时间、等级和信息
@@ -160,8 +156,9 @@ void Logger::Info(char* pLoggerContent, int nLine, char* pFileWithLogger)
 	string strFileName = vsFilePath[vsFilePath.size() - 1];
 	LoggerMessage loggerMessage = GenerateLoggerMessage("Info", strLoggerContent, nLine, strFileName);
 	string strLogger = Logger2String(loggerMessage);
-
+	cout << strLogger << endl;
 	//将日志写入到队列里
+	g_DSLoggerMessage.push_back(loggerMessage);
 }
 
 /*************************************************************
@@ -184,8 +181,9 @@ void Logger::Warning(char* pLoggerContent, int nLine, char* pFileWithLogger)
 	string strFileName = vsFilePath[vsFilePath.size() - 1];
 	LoggerMessage loggerMessage = GenerateLoggerMessage("Warning", strLoggerContent, nLine, strFileName);
 	string strLogger = Logger2String(loggerMessage);
-
+	cout << strLogger << endl;
 	//将日志写入到队列里
+	g_DSLoggerMessage.push_back(loggerMessage);
 }
 
 /*************************************************************
@@ -208,8 +206,9 @@ void Logger::Error(char* pLoggerContent, int nLine, char* pFileWithLogger)
 	string strFileName = vsFilePath[vsFilePath.size() - 1];
 	LoggerMessage loggerMessage = GenerateLoggerMessage("Error", strLoggerContent, nLine, strFileName);
 	string strLogger = Logger2String(loggerMessage);
-
+	cout << strLogger << endl;
 	//将日志写入到队列里
+	g_DSLoggerMessage.push_back(loggerMessage);
 }
 
 

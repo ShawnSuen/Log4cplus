@@ -19,7 +19,7 @@ class Logger
 {
 
 public:
-	deque<string> g_DSLoggerBuff;//定义一个对列，用来缓存数据
+	deque<LoggerMessage> g_DSLoggerMessage;//定义一个对列，用来缓存数据
 	/*************************************************************
 	* 概述:     初始化Logger库的方法
 	* 函数名:   InitLogger

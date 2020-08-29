@@ -9,6 +9,7 @@
 #include <sstream>
 #include <gtest/gtest.h>
 #include <string>
+#include <thread>
 
 
 
@@ -19,8 +20,10 @@
 
 #include "../logger.h"
 #include "../ManageLog.h"
-#include "../ThreadDeque.h"
+
 #include "../loggermessage.h"
+#include "../utils.h"
+
 
 /*
 //测试获取logger对象的时间
@@ -69,13 +72,18 @@ TEST(test_LoggerMessage, test_GetLoggerContent)
 	EXPECT_EQ("success", logger.Log("Info", "test"));
 }
 */
+Logger logger;
+void testsss()
+{
+	logger.DEBUG("This is a DEBUG message!");
+}
 ManageLog manageLog;
 TEST(test_ManageLog, test_GetLogConfig)
 {
 
 	EXPECT_EQ(true, manageLog.GetLoggerConfig());
 }
-Logger logger;
+
 int main(int argc,char* argv[])
 {
 
@@ -110,12 +118,21 @@ int main(int argc,char* argv[])
 	//	cout << "strDataDeque的数量" << strDataDeque.size() << endl;
 	//    ManageLog ManageLogTest;
 	//    ManageLogTest.DequeToFile(strDataDeque);
-
+	/*
+	Utils utils;
 	logger.DEBUG("This is a DEBUG message!");
 	logger.INFO("This is a INFO message!");
 	logger.WARNING("This is a WARNING message!");	
 	logger.ERROR("This is a ERROR messsage!");
+
 	char* pMessage = "test";
+	*/
+	thread t(testsss);
+	t.join();
+	thread t1(testsss);
+	t1.join();
+
+	cout << logger.g_DSLoggerMessage.size() << endl;
 	manageLog.GetLoggerConfig();
 	testing::InitGoogleTest(&argc, argv);
 	return RUN_ALL_TESTS();

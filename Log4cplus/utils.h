@@ -37,5 +37,19 @@ public:
 	*************************************************************/
 	string SearchValueInMap(map<string, string> mssTargetMap, string strKey);
 
+	/*************************************************************
+	* 概述:     获取本地系统时间，精确到毫秒
+	* 函数名:   GetLocalSystemTime
+	* 属:		public
+	* 返回值:   string strLocalTime
+	* 参数列表： 	       参数类型           		描述
+	* strLocalTime 	       string					返回本地系统时间
+	* 版本历史
+	*1.0 2020/08/27     孙港富实现功能
+	*************************************************************/
+	string GetLocalSystemTime();
+
 };
+
+
 #endif

@@ -39,6 +39,21 @@ void LoggerMessage::SetTime(string strTime)
 }
 
 /*************************************************************
+* 概述:     设置此时Logger日志所在的进程号
+* 函数名:   SetLoggerPid
+* 属:		public
+* 返回值:   void
+* 参数列表： 	       参数类型           		描述
+* nLoggerPid 	       int						当前的进程
+* 版本历史
+*1.0 2020/08/29     孙港富实现功能
+*************************************************************/
+void LoggerMessage::SetLoggerPid(int nLoggerPid)
+{
+	LoggerMessage::m_NProcessId = nLoggerPid;
+}
+
+/*************************************************************
 * 概述:     设置logger对象的等级
 * 函数名:   SetLoggerRank
 * 属:		public
@@ -51,6 +66,21 @@ void LoggerMessage::SetTime(string strTime)
 void LoggerMessage::SetLoggerRank(string strLoggerRank)
 {
 	LoggerMessage::m_StrLoggerRank = strLoggerRank;
+}
+
+/*************************************************************
+* 概述:     设置此时Logger日志所在的进程号
+* 函数名:   SetLoggerPid
+* 属:		public
+* 返回值:   void
+* 参数列表： 	       参数类型           		描述
+* nLoggerPid 	       int						当前的进程
+* 版本历史
+*1.0 2020/08/29     孙港富实现功能
+*************************************************************/
+void LoggerMessage::SetLoggerTid(int nLoggerTid)
+{
+	LoggerMessage::m_NThreadId = nLoggerTid;
 }
 
 /*************************************************************
@@ -114,6 +144,21 @@ string LoggerMessage::GetTime()
 }
 
 /*************************************************************
+* 概述:     获取Logger日志所在的进程号
+* 函数名:   SetLoggerPid
+* 属:		public
+* 返回值:   void
+* 参数列表： 	       参数类型           		描述
+*
+* 版本历史
+*1.0 2020/08/29     孙港富实现功能
+*************************************************************/
+int LoggerMessage::GetLoggerPid()
+{
+	return LoggerMessage::m_NProcessId;
+}
+
+/*************************************************************
 * 概述:     获取logger对象的等级
 * 函数名:   GetLoggerRank
 * 属:		public
@@ -127,6 +172,22 @@ string LoggerMessage::GetLoggerRank()
 {
 	return m_StrLoggerRank;
 }
+
+/*************************************************************
+* 概述:     获取此时Logger日志所在的线程号
+* 函数名:   SetLoggerTid
+* 属:		public
+* 返回值:   void
+* 参数列表： 	       参数类型           		描述
+* 
+* 版本历史
+*1.0 2020/08/29     孙港富实现功能
+*************************************************************/
+int LoggerMessage::GetLoggerTid() 
+{
+	return m_NThreadId;
+}
+
 
 /*************************************************************
 * 概述:     获取logger对象实例化的文件

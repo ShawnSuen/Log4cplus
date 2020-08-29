@@ -5,6 +5,12 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <chrono>
+#include <ctime>
+#include <iomanip>
+#include <sstream>
+#include <stdio.h>
+#include <windows.h>
 
 #include "utils.h"
 
@@ -85,4 +91,28 @@ string Utils::SearchValueInMap(map<string, string> mssTargetMap, string strKey)
 	return strValue;
 }
 
+/*************************************************************
+* 概述:     获取本地系统时间，精确到毫秒
+* 函数名:   GetLocalSystemTime
+* 属:		public
+* 返回值:   string strLocalTime
+* 参数列表： 	       参数类型           		描述
+* strLocalTime 	       string					返回本地系统时间
+* 版本历史
+*1.0 2020/08/27     孙港富实现功能
+*************************************************************/
+std::string Utils::GetLocalSystemTime() 
+{
+	SYSTEMTIME sys;
+	GetLocalTime(&sys);
+
+	char cLocalTime[34];
+
+	sprintf(cLocalTime,"%4d/%02d/%02d %02d:%02d:%02d.%03d"
+		, sys.wYear, sys.wMonth, sys.wDay
+		, sys.wHour, sys.wMinute, sys.wSecond, sys.wMilliseconds);
+
+	string strLcoalTime = cLocalTime;
+	return strLcoalTime;
+}
 #endif

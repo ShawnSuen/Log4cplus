@@ -25,3 +25,10 @@ This is a log system developed by the c++.
    日志异步写入：
 
    其他功能：支持自定义日志文件路径，支持日志是否输出到标准输出，支持日志是否写入日志文件
+   # 接口
+   `InitLogger` 读取logger配置文件。
+   `DEBUG` 生成一条DEBUG日志。
+   `INFO` 生成一条INFO日志。
+   `WARNING` 生成一条WARNING日志。
+   `ERROR` 生成一条ERROR日志。
+   `CloseLogger` 生成多条消费者线程，分别为将缓存区logger数据写入到日志文件中，将缓存区logger数据写到控制台，在logger文件超过数量上限时，对文件进行按照时间顺序删除。

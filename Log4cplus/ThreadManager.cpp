@@ -47,12 +47,12 @@ LoggerConfig ThreadManager::ReadLoggerManager()
 }
 
 /*************************************************************
-* 概述:     将
-* 函数名:   
-* 属: 
+* 概述:     将logger日志写入到logger文件
+* 函数名:   WriteLogger2File
+* 属:		public
 * 返回值:   void
 * 参数列表:
-* deque<string> dsLoggerMessage 	       
+* deque<string> dsLoggerMessage: 写入控制台的目标队列 	       
 * 版本历史
 * 1.0 		2020/08/30     孙港富实现功能
 *************************************************************/
@@ -71,6 +71,16 @@ void ThreadManager::WriteLogger2File(deque<string> dsLoggerMessage)
 	locker.unlock();
 }
 
+/*************************************************************
+* 概述:     将logger日志输出到控制台的线程
+* 函数名:   WriteLogger2Console
+* 属:		public
+* 返回值:   void
+* 参数列表:
+* deque<string> dsLoggerMessage: 写入控制台的目标队列 	       
+* 版本历史
+* 1.0 		2020/08/31     孙港富实现功能
+*************************************************************/
 void ThreadManager::WriteLogger2Console(deque<string> dsLoggerMessage)
 {
 	std::unique_lock<std::mutex> locker(g_Mutex); //上锁
@@ -87,6 +97,16 @@ void ThreadManager::WriteLogger2Console(deque<string> dsLoggerMessage)
 	locker.unlock();
 }
 
+/*************************************************************
+* 概述:     清理log文件，保持log文件数量在期望的数量
+* 函数名:   ClearLogFile
+* 属:		public
+* 返回值:   void
+* 参数列表:
+*   	       
+* 版本历史
+* 1.0 		2020/08/31     孙港富实现功能
+*************************************************************/
 void ThreadManager::ClearLogFile()
 {
 		std::unique_lock<std::mutex> locker(g_Mutex); //上锁

@@ -50,13 +50,12 @@ public:
 	string GetLocalSystemTime();
 
 	/*************************************************************
-	* 概述:     对目标文件组中的文件进行排序，因为Log文件的名字以其
-	*		创建日期命名，所以可以根据文件名来对文件组进行排序
+	* 概述:     采用冒泡排序算法对vector<string>容器按照字符串进行排序
 	* 函数名:   SortFileByName
 	* 属:		public
-	* 返回值:   void
+	* 返回值:   vecotr<string> vesTargetVector: 返回已经排序的vector<string>容器
 	* 参数列表:
-	* vector<string> vsFileGroup 	 期望排序的目标文件组
+	* vector<string> vesTargetVector:	传入期望进行排序的目标vector<string>容器
 	* 版本历史
 	* 1.0 		2020/08/29     孙港富实现功能
 	*************************************************************/

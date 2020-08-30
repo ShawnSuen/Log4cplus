@@ -23,9 +23,10 @@ ManageLog manageLog;
 using namespace std;
 
 /*************************************************************
-* 概述:     初始化logger
+* 概述:     启动logger的使用。在此方法中包含了读取logger配置文件
+*		其中也采用的线程的方式来调用程序。
 * 函数名:   Init
-* 属:
+* 属:		public
 * 返回值:   void
 * 参数列表： 	       参数类型           		描述
 *
@@ -41,6 +42,19 @@ void Logger::InitLogger()
 	
 }
 
+/*************************************************************
+* 概述:     结束logger使用，其中包含了将数据缓存区的logger内容
+*		分别写入到logger文件夹、控制台，以及及时清理logger文件
+*		保证log文件的数量不会过多。同时生成了三个线程以实现异步
+*		的写入和删除，减小对其他线程的影响。
+* 函数名:   CloseLogger
+* 属:		public	
+* 返回值:   void
+* 参数列表:
+*   	       
+* 版本历史
+* 1.0 		2020/08/30     孙港富实现功能
+*************************************************************/
 void Logger::CloseLogger()
 {
 	thread tWrite2LoggerFileThread(&ThreadManager::WriteLogger2File, threadManager, g_DSLoggerMessage);
@@ -77,15 +91,17 @@ std::string Logger::Logger2String(LoggerMessage loggerMessage)
 }
 
 /*************************************************************
-* 概述:     实例化Logger对象，完成对Logger对象的属性进行赋值
+* 概述:     生成一条logger日志
 * 函数名:   GenerateLoggerMessage
 * 属:		public
-* 返回值:   void
-* 参数列表： 	       参数类型           		描述
-* strLoggerRank 	   string					输入logger的等级
-* strLoggerContent	   string					输入logger的内容
+* 返回值:   LoggerMessage loggerMessage: 对应属性已经赋值后的logger对象
+* 参数列表:
+* string strLoggerRank:	log日志的等级
+* string strLoggerContent:	log日志的内容
+* int nLine: 使用log进行日志记录时，对应语句所在的代码行数
+* string strFileWithLogger: 使用log进行日志记录时，对应语句所在的文件名
 * 版本历史
-*1.0 2020/08/27     孙港富实现功能
+* 1.0 		2020/08/30     孙港富实现功能
 *************************************************************/
 LoggerMessage Logger::GenerateLoggerMessage(std::string strLoggerRank, std::string strLoggerContent, int nLine, std::string strFileWithLogger)
 {

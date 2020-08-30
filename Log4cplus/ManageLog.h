@@ -74,6 +74,16 @@ public:
 
 	vector<string> SortFileByName(vector<string> vsFileGroup);
 
+	/*************************************************************
+	* 概述:     将缓存区的logger数据写到logger文件中
+	* 函数名:   Write2LogFile
+	* 属:		public
+	* 返回值:   void
+	* 参数列表:
+	* string strFilePath 	       
+	* 版本历史
+	* 1.0 		2020/08/30     孙港富实现功能
+	*************************************************************/
 	void Write2LogFile(string strFilePath,deque<string> dsLoggerMessage);
 };
 

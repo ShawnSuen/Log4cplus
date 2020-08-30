@@ -22,9 +22,6 @@
     <Filter Include="源文件\tinyxml">
       <UniqueIdentifier>{6b1a5416-828b-4b6b-b02a-3a45a50d5e32}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\NewFilter1">
-      <UniqueIdentifier>{dc304d36-e1ff-4bbe-8c9e-3225ce353bd2}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="logger.cpp">

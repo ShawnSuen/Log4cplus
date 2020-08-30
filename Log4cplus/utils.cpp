@@ -116,6 +116,16 @@ std::string Utils::GetLocalSystemTime()
 	return strLcoalTime;
 }
 
+/*************************************************************
+* 概述:     采用冒泡排序算法对vector<string>容器按照字符串进行排序
+* 函数名:   SortFileByName
+* 属:		public
+* 返回值:   vecotr<string> vesTargetVector: 返回已经排序的vector<string>容器
+* 参数列表:
+* vector<string> vesTargetVector:	传入期望进行排序的目标vector<string>容器
+* 版本历史
+* 1.0 		2020/08/29     孙港富实现功能
+*************************************************************/
 vector<string> Utils::SortVectorString(vector<string> vesTargetVector)
 {
 	for (int nIndex = 0; nIndex < vesTargetVector.size(); nIndex++) {//排列len趟完成排序

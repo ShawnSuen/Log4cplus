@@ -11,16 +11,11 @@
 #include <string>
 #include <thread>
 
-
-
-
-
 #include <fstream> // c++ ÎÄ¼þIOÍ·bai
 #pragma comment(lib,"gtestd.lib")
 
 #include "../logger.h"
 #include "../ManageLog.h"
-
 #include "../loggermessage.h"
 
 
@@ -99,23 +94,16 @@ TEST(test_ManageLog, test_CreateFile)
 Logger logger;
 void test1(int i)
 {
-	string messge = "This is DEBUG test!" + to_string(i);
-	char* messc = (char*)messge.c_str();
-	logger.DEBUG(messc);
-} 
-void test2()
-{
 	for (int i = 0; i < 1000; i++)
 	{
 		logger.INFO("This is INFO test!");
 	}
 }
-
-void test3()
+void test2(int i)
 {
 	for (int i = 0; i < 1000; i++)
 	{
-		logger.ERROR("This is ERROR test!");
+		logger.DEBUG("This is DEBUG test!");
 	}
 }
 int main(int argc,char* argv[])
@@ -162,22 +150,67 @@ int main(int argc,char* argv[])
 	char* pMessage = "test";
 	*/
 
-	thread t1(test2);
-	t1.join();
 
-	for (int i = 0; i < 2000; i++)
-	{
-		logger.ERROR("This is ERROR test!");
-	}
-	
-	thread t3(test3);
-	t3.join();
 
-	for (int i = 0; i < 2000; i++)
-	{
-		thread t(test1,i);
+		thread t(test1,0);
 		t.join();
-	}
+
+		thread t1(test1, 0);
+		t1.join();
+
+		thread t22(test2, 0);
+		t22.join();
+		thread t23(test2, 0);
+		t23.join();
+		thread t2(test1, 0);
+		t2.join();
+
+		thread t3(test1, 0);
+		t3.join();
+
+		thread t4(test1, 0);
+		t4.join();
+
+		thread t5(test1, 0);
+		t5.join();
+
+		thread t6(test1, 0);
+		t6.join();
+
+		thread t7(test1, 0);
+		t7.join();
+
+		thread t8(test1, 0);
+		t8.join();
+
+		thread t9(test1, 0);
+		t9.join();
+
+		thread t0(test1, 0);
+		t0.join();
+
+		thread t11(test2, 0);
+		t11.join();
+
+
+		thread t33(test2, 0);
+		t33.join();
+		thread t44(test2, 0);
+		t44.join();
+
+		thread t55(test2, 0);
+		t55.join();
+
+		thread t66(test2, 0);
+		t66.join();
+
+		thread t77(test2, 0);
+		t77.join();
+		thread t88(test2, 0);
+
+		t88.join();
+		thread t99(test2, 0);
+		t99.join();
 
 
 	//cout << logger.g_DSLoggerMessage.size() << endl;
@@ -189,11 +222,11 @@ int main(int argc,char* argv[])
 	////manageLog.ClearLogFile();
 
 
-
+	logger.InitLogger();
 	testing::InitGoogleTest(&argc, argv);
 	RUN_ALL_TESTS();
 	//logger.CloseLogger();
-
+	logger.CloseLogger();
 	return 0;
 }
 

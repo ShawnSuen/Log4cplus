@@ -39,15 +39,19 @@ LoggerConfig loggerConfig;
 	*************************************************************/
 std::string ManageLog::CreateLogFile(string strFilePath) {
 	string strFileName = utils.GetLocalSystemTime() + ".txt";
+
 	vector<string> vsFilePath = utils.Split(strFileName, " ");
 	vector<string> vsFileNameDate = utils.Split(vsFilePath[0], "-");
 	vector<string> vsFileNameTime = utils.Split(vsFilePath[1], ":");
 	string strFullFilePath = strFilePath + "/" +
-		vsFileNameDate[0] + vsFileNameDate[1] + vsFileNameDate[2] +
+		 vsFileNameDate[0]+ vsFileNameDate[1] + vsFileNameDate[2] +
 		vsFileNameTime[0] + vsFileNameTime[1] + vsFileNameTime[2] + vsFileNameTime[3];
 	string strOperationMessage;
 	ofstream fout(strFullFilePath);
+
 	if (fout) {                       // 如果创建成功
+		cout << "****************" << endl;
+		cout << "****************" << endl;
 		fout.close();                   // 执行完操作后关闭文件句柄
 		strOperationMessage = strFullFilePath;
 	}
@@ -146,13 +150,12 @@ LoggerConfig ManageLog::GetLoggerConfig()
 		string strOutput2File = utils.SearchValueInMap(m_MLoggerConfig, "Write2File");
 		bool bOutput2File;
 		istringstream(strOutput2File) >> boolalpha >> bOutput2File;
-
 		loggerConfig.SetOutput2LoggerFile(bOutput2File);
 		string strOutput2Console = utils.SearchValueInMap(m_MLoggerConfig, "Write2Console");
 		bool bWrite2Console;
-		istringstream(strOutput2File) >> boolalpha >> bWrite2Console;
-		loggerConfig.SetOutput2LoggerFile(bWrite2Console);
-
+		istringstream(strOutput2Console) >> boolalpha >> bWrite2Console;
+		loggerConfig.SetOutput2Console(bWrite2Console);
+	
 		return loggerConfig;
 	}
 }

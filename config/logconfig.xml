@@ -10,6 +10,6 @@
   <FileSize>5M</FileSize>
   <!--设置是否将log日志写到文件内-->
   <Write2File>true</Write2File>
-  <!--设置是否将log日志输出到控制台 默认为开启状态-->
+  <!--设置是否将log日志输出到控制台 默认为关闭状态-->
   <Write2Console>false</Write2Console>
 </Init>

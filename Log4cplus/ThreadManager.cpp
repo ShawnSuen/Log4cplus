@@ -19,6 +19,17 @@ condition_variable g_cond;//定义一个条件变量
 string m_StrFileFullPath = "";
 bool m_BReadLoggerConfig = false;
 LoggerConfig m_LoggerConfig;
+
+/*************************************************************
+* 概述:     读取Logger配置文件，并将读取到的信息封装到对象内
+* 函数名:   ReadLoggerManager
+* 属:		public
+* 返回值:   LoggerConfig m_LoggerConfig
+* 参数列表:
+*   	       
+* 版本历史
+* 1.0 		2020/08/30     孙港富实现功能
+*************************************************************/
 LoggerConfig ThreadManager::ReadLoggerManager()
 {
 	std::unique_lock<std::mutex> locker(g_Mutex); //上锁
@@ -26,14 +37,25 @@ LoggerConfig ThreadManager::ReadLoggerManager()
 	if (m_LoggerConfig.GetLoggerFilePath() != "")
 	{
 		m_StrFileFullPath = manageLog.CreateLogFile(m_LoggerConfig.GetLoggerFilePath());
+
 		locker.unlock();//释放锁
 		g_cond.notify_one();  // Notify one waiting thread, if there is one.
 		m_BReadLoggerConfig = true;
 	}
-	return g_loggerConfig;
+	return m_LoggerConfig;
 
 }
 
+/*************************************************************
+* 概述:     将
+* 函数名:   
+* 属: 
+* 返回值:   void
+* 参数列表:
+* deque<string> dsLoggerMessage 	       
+* 版本历史
+* 1.0 		2020/08/30     孙港富实现功能
+*************************************************************/
 void ThreadManager::WriteLogger2File(deque<string> dsLoggerMessage)
 {
 	std::unique_lock<std::mutex> locker(g_Mutex); //上锁
